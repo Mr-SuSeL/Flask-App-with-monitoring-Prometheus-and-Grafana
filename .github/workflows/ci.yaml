@@ -1,26 +1,29 @@
-name: Package Project
+name: Flask app CI/CD
 
-# when I need to run automation process
-on: [ push ]
+on: [push]
 
 jobs:
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # download the codebase
-      - uses: actions/checkout@v3
-      # my application was written in Python
-      - name: Set up Python 3
-        uses: actions/setup-python@v3
-      # installation required packages
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      # installation required packages for tests
-      - name: Install test dependencies
-        run: pip install -r test_requirements.txt
-      # tests!!!
-      - name: Tests
-        run: PYTHONPATH=. py.test
+    - name: Checkout repository code
+      uses: actions/checkout@v3
 
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        make deps
+
+    - name: Lint with flake8
+      run: |
+        make Lint
+
+    - name: Test with pytest
+      run: |
+        make test
