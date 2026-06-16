@@ -22,7 +22,7 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        make Lint
+        make lint
 
     - name: Test with pytest
       run: |
